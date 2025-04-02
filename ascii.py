@@ -1,14 +1,36 @@
 import cv2
 import os
 
-
 class AsciiGenerator:
     def __init__(self, path, modo=1, tamanho_maximo=100):
-        
-        #img_tratada = self.tratar_imagem(R"ASCII_ART\monarch.jpg")
-        img_tratada = self.tratar_imagem(path, tamanho_maximo)#self.tratar_imagem(R"C:\Users\Usuario\Desktop\Arquivos\CODE\ASCII_ART\monarch.jpg")
-        self.gerar_ascii(img_tratada, modo)
 
+        # trata a imagem recebida
+        img_tratada = self.tratar_imagem(path, tamanho_maximo)
+        # gera a string com a conversão para ASCII
+        self.gerar_ascii(img_tratada, modo)
+        
+    def tratar_imagem(self, imagem, tamanho_maximo):
+        """
+        Função para tratar a imagem, convertendo-a para escala de cinza e redimensionando-a.
+        """
+        # converte a imagem para escala de cinza
+        image = cv2.imread(imagem)
+        img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        
+        # carrega as dimensões da imagem
+        largura_maxima = tamanho_maximo
+        img_altura, img_largura = img.shape
+        
+        # verifica se a imagem possui largura maior do que a máxima suportada
+        if img_largura > largura_maxima:
+            # calcula a nova altura da imagem mantendo a proporção
+            proporcao = img_largura / img_altura
+            nova_altura = int(largura_maxima / proporcao)
+
+            # redimensiona a imagem
+            img = cv2.resize(img,(largura_maxima, nova_altura))
+
+        return img
     def gerar_ascii(self, imagem, modo):
         
         # caracteres para a representação em ASCII
@@ -37,28 +59,7 @@ class AsciiGenerator:
             arquivo.write(art_ascii)
 
 
-    def tratar_imagem(self, imagem, tamanho_maximo):
-        """
-        Função para tratar a imagem, convertendo-a para escala de cinza e redimensionando-a.
-        """
-        # converte a imagem para escala de cinza
-        image = cv2.imread(imagem)
-        img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        
-        # carrega as dimensões da imagem
-        largura_maxima = tamanho_maximo
-        img_altura, img_largura = img.shape
-        
-        # verifica se a imagem possui largura maior do que a máxima suportada
-        if img_largura > largura_maxima:
-            # calcula a nova altura da imagem mantendo a proporção
-            proporcao = img_largura / img_altura
-            nova_altura = int(largura_maxima / proporcao)
 
-            # redimensiona a imagem
-            img = cv2.resize(img,(largura_maxima, nova_altura))
-
-        return img
     
 
 def start_program():
