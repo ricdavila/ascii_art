@@ -3,18 +3,20 @@ import os
 
 
 class AsciiGenerator:
-    def __init__(self):
+    def __init__(self, path, modo=1, tamanho_maximo=100):
         
         #img_tratada = self.tratar_imagem(R"ASCII_ART\monarch.jpg")
-        img_tratada = self.tratar_imagem(R"C:\Users\Usuario\Desktop\Arquivos\CODE\ASCII_ART\monarch.jpg")
-        self.gerar_ascii(img_tratada)
+        img_tratada = self.tratar_imagem(path, tamanho_maximo)#self.tratar_imagem(R"C:\Users\Usuario\Desktop\Arquivos\CODE\ASCII_ART\monarch.jpg")
+        self.gerar_ascii(img_tratada, modo)
 
-    def gerar_ascii(self, imagem):
+    def gerar_ascii(self, imagem, modo):
         
         # caracteres para a representação em ASCII
-        #ascii_chars =["$", "@", "B", "%", "8", "&", "W", "M", "#", "*", "o", "a", "h", "k", "b", "d", "p", "q", "w", "m", "Z", "O", "0", "Q", "L", "C", "J", "U", "Y", "X", "z", "c", "v", "u", "n", "x", "r", "j", "f", "t", "/", "\\", "|", "(", ")", "1", "{", "}", "[", "]", "?", "-", "_", "+", "~", "<", ">", "i", "!", "l", "I", ";", ":", ",", "\"", "^", "`", "'", "."]
-        #ascii_chars = [" ", ".", "'", "`", "^", "\"", ",", ":", ";", "I", "l", "!", "i", ">", "<", "~", "+", "_", "-", "?", "]", "[", "}", "{", "1", ")", "(", "|", "\\", "/", "t", "f", "j", "r", "x", "n", "u", "v", "c", "z", "X", "Y", "U", "J", "C", "L", "Q", "0", "O", "Z", "m", "w", "q", "p", "d", "b", "k", "h", "a", "o", "*", "#", "M", "W", "&", "8", "%", "B", "@", "$"]
-        ascii_chars = [" ", ".", ",", ":", ";", "+", "*", "?", "%", "S", "#", "@"]
+        if modo == 2:
+            ascii_chars = [" ", ".", "'", "`", "^", "\"", ",", ":", ";", "I", "l", "!", "i", ">", "<", "~", "+", "_", "-", "?", "]", "[", "}", "{", "1", ")", "(", "|", "\\", "/", "t", "f", "j", "r", "x", "n", "u", "v", "c", "z", "X", "Y", "U", "J", "C", "L", "Q", "0", "O", "Z", "m", "w", "q", "p", "d", "b", "k", "h", "a", "o", "*", "#", "M", "W", "&", "8", "%", "B", "@", "$"]            
+        else:
+            ascii_chars = [" ", ".", ",", ":", ";", "+", "*", "?", "%", "S", "#", "@"]
+
         # número para representar o grau de cinza/de luminosidade
         grau_cinza = 255 / (len(ascii_chars) - 1)
 
@@ -35,17 +37,16 @@ class AsciiGenerator:
             arquivo.write(art_ascii)
 
 
-    def tratar_imagem(self, imagem):
+    def tratar_imagem(self, imagem, tamanho_maximo):
         """
         Função para tratar a imagem, convertendo-a para escala de cinza e redimensionando-a.
         """
         # converte a imagem para escala de cinza
         image = cv2.imread(imagem)
         img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
         
         # carrega as dimensões da imagem
-        largura_maxima = 100
+        largura_maxima = tamanho_maximo
         img_altura, img_largura = img.shape
         
         # verifica se a imagem possui largura maior do que a máxima suportada
@@ -54,20 +55,43 @@ class AsciiGenerator:
             proporcao = img_largura / img_altura
             nova_altura = int(largura_maxima / proporcao)
 
-            print(nova_altura, largura_maxima)
             # redimensiona a imagem
             img = cv2.resize(img,(largura_maxima, nova_altura))
 
         return img
     
 
-    
+def start_program():
+    print("\n--------------------------------------")
+    print("        CONVERSOR IMAGEM -> ASCII")
+    print("--------------------------------------")
+    print("\nDigite ESC para sair.")
+    print("\nINSIRA: <CAMINHO DA IMAGEM> <MODO> <TAMANHO MÁXIMO>")
+    print("\nMODO: PADRÃO [1] ou AVANÇADO [2]")
+    print("TAMANHO MÁXIMO: int (padrão = 100)")
 
-        
+    dados_inseridos = input("\nDigite os dados: ").split(" ")
+    if dados_inseridos[0] == "ESC":
+        exit(0)
+    elif len(dados_inseridos) == 3:
+        img_path = dados_inseridos[0]
+        modo = int(dados_inseridos[1])
+        tamanho_maximo = int(dados_inseridos[2])
+
+    AsciiGenerator(img_path, modo, tamanho_maximo)
+
+    repeat = input("\n\nDeseja fazer mais uma conversão? [s/n]: ").lower() 
+    
+    if repeat == "s":
+        os.system("cls")
+        start_program()
+
 
 if __name__ == "__main__":
-    AsciiGenerator()
+    start_program()
 
+
+        
 
 
 
