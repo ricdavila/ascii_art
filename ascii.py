@@ -20,14 +20,14 @@ class AsciiGenerator:
         # número para representar o grau de cinza/de luminosidade
         grau_cinza = 255 / (len(ascii_chars) - 1)
 
-        art_ascii = "\n\n\n                                     "
+        art_ascii = ""
 
         for linha in imagem:
             for pixel in linha:
                 indice = int(pixel/grau_cinza)
                 caractere = ascii_chars[indice]
                 art_ascii += caractere + " "
-            art_ascii += "\n                                    "
+            art_ascii += "\n"
 
         os.system("cls")
         print(art_ascii)
@@ -62,24 +62,55 @@ class AsciiGenerator:
     
 
 def start_program():
+    # cabeçalho do programa
+    os.system("cls")
     print("\n--------------------------------------")
-    print("        CONVERSOR IMAGEM -> ASCII")
+    print("         IMAGEM -> ASCII")
     print("--------------------------------------")
     print("\nDigite ESC para sair.")
-    print("\nINSIRA: <CAMINHO DA IMAGEM> <MODO> <TAMANHO MÁXIMO>")
-    print("\nMODO: PADRÃO [1] ou AVANÇADO [2]")
-    print("TAMANHO MÁXIMO: int (padrão = 100)")
+    print("\n- MODO: Padrão [1] ou Avançado [2]")
+    print("- TAMANHO MÁXIMO: Número Inteiro (padrão = 100)")
 
-    dados_inseridos = input("\nDigite os dados: ").split(" ")
-    if dados_inseridos[0] == "ESC":
+    receber_dados()
+
+
+def receber_dados():
+
+    # recebe os dados de entrada do usuário
+    dados_inseridos = input("\n\n> Insira os dados: <CAMINHO DA IMAGEM> <MODO> <TAMANHO MÁXIMO>: ").split(" ")
+    
+    # verifica se o usuário deseja sair do programa
+    if dados_inseridos[0].upper() == "ESC":
         exit(0)
-    elif len(dados_inseridos) == 3:
+    
+    # verifica a validade do caminho inserido
+    if os.path.exists(dados_inseridos[0]):
         img_path = dados_inseridos[0]
+    else:
+        print("\n\n[ERRO] Caminho inválido!")
+        receber_dados()
+    
+    # verifica se o modo inserido é válido 
+    if int(dados_inseridos[1]) == 1 or int(dados_inseridos[1]) == 2:
         modo = int(dados_inseridos[1])
-        tamanho_maximo = int(dados_inseridos[2])
-
+    else:
+        print("\n\n[ERRO] Modo inválido! Insira [1] para o modo PADRÃO ou [2] para o modo AVANÇADO.")
+        receber_dados()
+    
+    # verifica se um tamanho máximo foi inserido
+    if len(dados_inseridos) == 3:
+        if dados_inseridos[2].isdigit():
+            tamanho_maximo = int(dados_inseridos[2])
+        else:
+            print("\n\n[ERRO] Tamanho máximo inválido! Insira um número inteiro.")
+            receber_dados()
+    else:
+        tamanho_maximo = 100
+ 
+    # gera e exibe o ASCII a partir dos dados inseridos
     AsciiGenerator(img_path, modo, tamanho_maximo)
 
+    # pergunta se o usuário deseja fazer mais uma conversão
     repeat = input("\n\nDeseja fazer mais uma conversão? [s/n]: ").lower() 
     
     if repeat == "s":
