@@ -1,21 +1,75 @@
 import cv2
 import os
 
-class AsciiGenerator:
-    def __init__(self, path, modo=1, tamanho_maximo=100):
+# conjuntos de caracteres disponíveis
+ASCII_CHARS_DEFAULT = [" ", ".", ",", ":", ";", "+", "*", "?", "%", "S", "#", "@"]
 
-        # trata a imagem recebida
-        img_tratada = self.tratar_imagem(path, tamanho_maximo)
-        # gera a string com a conversão para ASCII
-        self.gerar_ascii(img_tratada, modo)
+ASCII_CHARS_ADVANCED = [" ", ".", "'", "`", "^", "\"", ",", ":", ";", "I", "l", "!", 
+                        "i", ">", "<", "~", "+", "_", "-", "?", "]", "[", "}", "{", 
+                        "1", ")", "(", "|", "\\", "/", "t", "f", "j", "r", "x", "n", 
+                        "u", "v", "c", "z", "X", "Y", "U", "J", "C", "L", "Q", "0", 
+                        "O", "Z", "m", "w", "q", "p", "d", "b", "k", "h", "a", "o", 
+                        "*", "#", "M", "W", "&", "8", "%", "B", "@", "$"]            
+
+class AsciiGenerator:
+    """Classe gera o ASCII a partir de uma imagem tratada."""
+
+    def __init__(self):
+        """Inicializa o conversor de imagem para ASCII."""
+        pass
         
-    def tratar_imagem(self, imagem, tamanho_maximo):
+    def gerar_ascii(self, imagem, modo):
         """
-        Função para tratar a imagem, convertendo-a para escala de cinza e redimensionando-a.
+        A partir da imagem tratada, converte cada pixel da imagem para o respectivo caractere
+        ASCII de acordo com o grau de luminosidade/cinza.
         """
-        # converte a imagem para escala de cinza
-        image = cv2.imread(imagem)
-        img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        
+        # define qual conjunto de caracteres que será utilizado
+        if modo == 2:
+            ascii_chars = ASCII_CHARS_ADVANCED
+        else:
+            ascii_chars = ASCII_CHARS_DEFAULT
+
+        # número para representar o grau de cinza/de luminosidade
+        grau_cinza = 255 / (len(ascii_chars) - 1)
+        
+        # armazena os caracteres ASCII
+        art_ascii = ""
+
+        # percorre cada linha e cada pixel da imagem, escolhendo um caractere ASCII correspondente
+        # e adicionando-o à string principal 'art_ascii'
+        for linha in imagem:
+            for pixel in linha:
+                indice = int(pixel/grau_cinza)
+                caractere = ascii_chars[indice]
+                art_ascii += caractere + " "
+            art_ascii += "\n"
+
+        # limpa o terminal
+        os.system("cls")
+        # escreve a string criada no terminal
+        print(art_ascii)
+
+        # salva o resultado em um arquivo de texto
+        #with open("ascii_art.txt", "w") as arquivo:
+        #    arquivo.write(art_ascii)
+
+class ImageImport():
+    """
+    Classe que recebe o caminho da imagem e a importa, retornando uma imagem redimensionada e em
+    escala de cinza.
+    """
+
+    def __init__(self):
+            """Inicializa o importador de imagens."""
+            pass
+
+    def tratar_imagem(self, caminho, tamanho_maximo):
+        """Função para tratar a imagem, convertendo-a para escala de cinza e redimensionando-a."""
+
+        # importa e converte a imagem para escala de cinza
+        imagem_file = cv2.imread(caminho)
+        img = cv2.cvtColor(imagem_file, cv2.COLOR_BGR2GRAY)
         
         # carrega as dimensões da imagem
         largura_maxima = tamanho_maximo
@@ -26,44 +80,15 @@ class AsciiGenerator:
             # calcula a nova altura da imagem mantendo a proporção
             proporcao = img_largura / img_altura
             nova_altura = int(largura_maxima / proporcao)
-
             # redimensiona a imagem
             img = cv2.resize(img,(largura_maxima, nova_altura))
 
         return img
-    def gerar_ascii(self, imagem, modo):
-        
-        # caracteres para a representação em ASCII
-        if modo == 2:
-            ascii_chars = [" ", ".", "'", "`", "^", "\"", ",", ":", ";", "I", "l", "!", "i", ">", "<", "~", "+", "_", "-", "?", "]", "[", "}", "{", "1", ")", "(", "|", "\\", "/", "t", "f", "j", "r", "x", "n", "u", "v", "c", "z", "X", "Y", "U", "J", "C", "L", "Q", "0", "O", "Z", "m", "w", "q", "p", "d", "b", "k", "h", "a", "o", "*", "#", "M", "W", "&", "8", "%", "B", "@", "$"]            
-        else:
-            ascii_chars = [" ", ".", ",", ":", ";", "+", "*", "?", "%", "S", "#", "@"]
 
-        # número para representar o grau de cinza/de luminosidade
-        grau_cinza = 255 / (len(ascii_chars) - 1)
-
-        art_ascii = ""
-
-        for linha in imagem:
-            for pixel in linha:
-                indice = int(pixel/grau_cinza)
-                caractere = ascii_chars[indice]
-                art_ascii += caractere + " "
-            art_ascii += "\n"
-
-        os.system("cls")
-        print(art_ascii)
-
-        # salva o resultado em um arquivo de texto
-        with open("ascii_art.txt", "w") as arquivo:
-            arquivo.write(art_ascii)
-
-
-
-    
 
 def start_program():
-    # cabeçalho do programa
+    """Primeira função a ser chamada no início do programa. Mostra o cabeçalho do programa."""
+
     os.system("cls")
     print("\n--------------------------------------")
     print("         IMAGEM -> ASCII")
@@ -71,11 +96,14 @@ def start_program():
     print("\nDigite ESC para sair.")
     print("\n- MODO: Padrão [1] ou Avançado [2]")
     print("- TAMANHO MÁXIMO: Número Inteiro (padrão = 100)")
-
+    # abre espaço para o input de dados
     receber_dados()
 
-
 def receber_dados():
+    """
+    Função para receber os dados do usuário referentes ao caminho da imagem, o modo
+    desejado para conversão e o tamanho máximo para o resultado final.
+    """
 
     # recebe os dados de entrada do usuário
     dados_inseridos = input("\n\n> Insira os dados: <CAMINHO DA IMAGEM> <MODO> <TAMANHO MÁXIMO>: ").split(" ")
@@ -89,6 +117,7 @@ def receber_dados():
         img_path = dados_inseridos[0]
     else:
         print("\n\n[ERRO] Caminho inválido!")
+        # 
         receber_dados()
     
     # verifica se o modo inserido é válido 
@@ -107,9 +136,21 @@ def receber_dados():
             receber_dados()
     else:
         tamanho_maximo = 100
- 
-    # gera e exibe o ASCII a partir dos dados inseridos
-    AsciiGenerator(img_path, modo, tamanho_maximo)
+
+    # repassa os dados recebidos para a conversão
+    converter_imagem(img_path, modo, tamanho_maximo)
+
+
+def converter_imagem(img_path, modo, tamanho_maximo):
+    """Função que recebe os dados e efetivamente converte a imagem."""
+
+    # trata a imagem
+    conversor_img = ImageImport()
+    img = conversor_img.tratar_imagem(img_path, tamanho_maximo)
+
+    # converte a imagem para ASCII
+    conversor_ascii = AsciiGenerator()
+    conversor_ascii.gerar_ascii(img, modo)
 
     # pergunta se o usuário deseja fazer mais uma conversão
     repeat = input("\n\nDeseja fazer mais uma conversão? [s/n]: ").lower() 
@@ -117,7 +158,6 @@ def receber_dados():
     if repeat == "s":
         os.system("cls")
         start_program()
-
 
 if __name__ == "__main__":
     start_program()
