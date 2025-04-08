@@ -15,4 +15,4 @@ Rode o script **ascii.py** e insira os dados pedidos.
 Para o tratamento da imagem, ou seja, sua conversão em **escala de cinza** e o seu **redimensionamento**, o programa utiliza a biblioteca **OpenCV**.
 Instale o pacote principal da biblioteca com o *pip*: `pip install opencv-python`
 
-Confira a [documentação](https://pypi.org/project/opencv-python/) em caso de dúvidas.
+Confira a [documentação](https://pypi.org/project/opencv-python/) da lib em caso de dúvidas.
