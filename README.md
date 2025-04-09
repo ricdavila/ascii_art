@@ -16,3 +16,4 @@ Para o tratamento da imagem, ou seja, sua conversão em **escala de cinza** e o 
 Instale o pacote principal da biblioteca com o *pip*: `pip install opencv-python`
 
 Confira a [documentação](https://pypi.org/project/opencv-python/) da lib em caso de dúvidas.
+

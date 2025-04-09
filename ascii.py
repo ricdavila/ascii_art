@@ -104,44 +104,45 @@ def receber_dados():
     Função para receber os dados do usuário referentes ao caminho da imagem, o modo
     desejado para conversão e o tamanho máximo para o resultado final.
     """
-
-    # recebe os dados de entrada do usuário
-    dados_inseridos = input("\n\n> Insira os dados: <CAMINHO DA IMAGEM> <MODO> <TAMANHO MÁXIMO>: ").split(" ")
-    
-    # verifica se o usuário deseja sair do programa
-    if dados_inseridos[0].upper() == "ESC":
-        exit(0)
-    
-    # verifica a validade do caminho inserido
-    if os.path.exists(dados_inseridos[0]):
-        img_path = dados_inseridos[0]
-    else:
-        print("\n\n[ERRO] Caminho inválido!")
-        # 
-        receber_dados()
-    
-    # verifica se o modo inserido é válido 
-    if int(dados_inseridos[1]) == 1 or int(dados_inseridos[1]) == 2:
-        modo = int(dados_inseridos[1])
-    else:
-        print("\n\n[ERRO] Modo inválido! Insira [1] para o modo PADRÃO ou [2] para o modo AVANÇADO.")
-        receber_dados()
-    
-    # verifica se um tamanho máximo foi inserido
-    if len(dados_inseridos) == 3:
-        if dados_inseridos[2].isdigit():
-            tamanho_maximo = int(dados_inseridos[2])
+    while True:
+        # recebe os dados de entrada do usuário
+        dados_inseridos = input("\n\n> Insira os dados: <CAMINHO DA IMAGEM> <MODO> <TAMANHO MÁXIMO>: ").split(" ")
+        
+        # verifica se o usuário deseja sair do programa
+        if dados_inseridos[0].upper() == "ESC":
+            exit(0)
+        
+        # verifica a validade do caminho inserido
+        # só continua o processo se o caminho for válido
+        if not os.path.exists(dados_inseridos[0]):
+            print("\n\n[ERRO] Caminho inválido!")
         else:
-            print("\n\n[ERRO] Tamanho máximo inválido! Insira um número inteiro.")
-            receber_dados()
-    else:
-        tamanho_maximo = 100
+            img_path = dados_inseridos[0]
+                
+            # verifica se o modo inserido é válido 
+            if not len(dados_inseridos) > 1:
+                print("\n\n[ERRO] Insira um Modo válido para a operação.")
+            elif not dados_inseridos[1].isdigit() or not int(dados_inseridos[1]) in [1, 2]:
+                print("\n\n[ERRO] Modo inválido! Insira [1] para o modo PADRÃO ou [2] para o modo AVANÇADO.")
+            else:
+                modo = int(dados_inseridos[1])
 
-    # repassa os dados recebidos para a conversão
-    converter_imagem(img_path, modo, tamanho_maximo)
+                # verifica se um tamanho máximo foi inserido
+                if len(dados_inseridos) > 2:
+                    if not dados_inseridos[2].isdigit():
+                        print("\n\n[ERRO] Tamanho máximo inválido! Insira um número inteiro.")                    
+                    else:
+                        tamanho_maximo = int(dados_inseridos[2])
+                        # repassa os dados recebidos para a conversão
+                        converter_imagem(img_path, modo, tamanho_maximo)       
+                else:
+                    converter_imagem(img_path, modo)       
+            
+
+            
 
 
-def converter_imagem(img_path, modo, tamanho_maximo):
+def converter_imagem(img_path, modo, tamanho_maximo=100):
     """Função que recebe os dados e efetivamente converte a imagem."""
 
     # trata a imagem
