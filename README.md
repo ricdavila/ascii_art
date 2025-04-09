@@ -2,11 +2,6 @@
 
 Projeto pessoal desenvolvido em **Python** e com a biblioteca **OpenCV**.
 
-![Texto Alternativo](https://ibb.co/Vcd4r3G5)
-
-https://ibb.co/r2Bh0YnB
-https://ibb.co/J1yyKvt
-
 ## Funcionamento
 
 Rode o script **ascii.py** e insira os dados pedidos. 
