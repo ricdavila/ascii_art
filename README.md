@@ -33,6 +33,9 @@ Quando solicitado, insira os dados para a conversão. Por exemplo:
 
 Para sair do programa digite `ESC`.
 
+> [!WARNING]
+> Para uma melhor visualização do resultado diretamente pelo terminal, utilize o **CTRL + scroll do mouse** para ajustá-lo à janela.
+
 ### Parâmetros do Programa
 
 - `CAMINHO DA IMAGEM` : (str) insira o caminho *(global)* para a imagem que deseja converter.
@@ -66,6 +69,7 @@ O script segue este fluxo de processamento :
 - Cada pixel da imagem é convertido para um caractere ASCII;
 - A conversão pauta-se na intensidade luminosa do pixel — caracteres mais 'densos', como '#' e '@', são utilizados para representar pixels mais claros.
 - Já para pixels menos luminosos, utiliza-se caracteres menos densos, como ',' ou ' '.
+- Para o correto funcionamento desse código, os conjuntos de caracteres devem estar **ordenados**, começando pelos **menos densos**.
 - Para melhor visualização, um espaço em branco é adicionado após cada caractere.
 
 #### 4. Exibição
