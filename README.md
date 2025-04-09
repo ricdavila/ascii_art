@@ -75,6 +75,7 @@ O script segue este fluxo de processamento :
 
 ![castelo](https://github.com/ricdavila/ascii_art/blob/8303456b0e482e71deeab5fe9004e8c68f1f37da/imgs/ascii_castle.png)
 
+![gato](https://github.com/ricdavila/ascii_art/blob/cb3a7b32dd46f9644e392e47b5ada05b1cb4d85c/imgs/ascii_cat.png)
 
 ## Possíveis Melhorias
 - Suporte para caracteres coloridos;
